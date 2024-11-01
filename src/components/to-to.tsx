@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { type todo } from "../server/db/schema";
+import { createTodo } from "../server/actions/create-todo";
 
 type TodoListProps =  {
   todoItems: (typeof todo.$inferSelect)[];
@@ -11,13 +12,14 @@ const TodoList: React.FC<TodoListProps> = ({ todoItems }) => {
   const [todos, setTodos] = useState<string[]>([]);
   const [userInput, setUserInput] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit =  async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userInput) {
       return;
     }
     setTodos([...todos, userInput]);
     setUserInput("");
+    await createTodo(userInput)
   };
 
   return (
